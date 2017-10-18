@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaticBranch">
+    <sql id="columns">
+        "ID" AS  id,
+        "BRANCH_TOTAL" AS  branchTotal,
+        "BRANCH_HB"  AS  branchHb,
+        "BRANCH_HD" AS  branchHd,
+        "BRANCH_HZ" AS  branchHz,
+        "BRANCH_XB" AS  branchXb,
+        "BRANCH_XN" AS  branchXn,
+        "BRANCH_DB" AS  branchDb,
+        "BRANCH_HN" AS  branchHn,
+        "BRANCH_SD" AS  branchSd,
+        "IMAGE_TOTAL" AS  imageTotal,
+        "IMAGE_HB" AS  imageHb,
+        "IMAGE_HD" AS  imageHd,
+        "IMAGE_HZ" AS  imageHz,
+        "IMAGE_XB" AS  imageXb,
+        "IMAGE_XN" AS  imageXn,
+        "IMAGE_DB" AS  imageDb,
+        "IMAGE_HN" AS  imageHn,
+        "IMAGE_SD" AS  imageSd,
+        "CREATE_BY" AS  createBy,
+        "CREATE_DATE" AS  createDate,
+        "UPDATE_BY" AS  updateBy,
+        "UPDATE_DATE" AS  updateDate,
+        "REMARKS" AS remarks ,
+        "STATUS" AS  status
+    </sql>
+
+    <select id="getAll" resultType="staticBranch">
+        SELECT
+        <include refid="columns" />
+        FROM
+        "RRS_STATIC_BRANCH"
+    </select>
+
+    <insert id="insert" parameterType="staticBranch" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO "RRS_STATIC_BRANCH"
+        (
+        "ID",
+        "BRANCH_TOTAL",
+        "BRANCH_HB",
+        "BRANCH_HD",
+        "BRANCH_HZ",
+        "BRANCH_XB",
+        "BRANCH_XN",
+        "BRANCH_DB",
+        "BRANCH_HN",
+        "BRANCH_SD",
+        "IMAGE_TOTAL",
+        "IMAGE_HB",
+        "IMAGE_HD",
+        "IMAGE_HZ",
+        "IMAGE_XB",
+        "IMAGE_XN",
+        "IMAGE_DB",
+        "IMAGE_HN",
+        "IMAGE_SD",
+        "CREATE_BY",
+        "CREATE_DATE",
+        "REMARKS",
+        "STATUS"
+        )
+        VALUES
+        (
+        #{ id },
+        #{ branchTotal },
+        #{ branchHb },
+        #{ branchHd },
+        #{ branchHz },
+        #{ branchXb },
+        #{ branchXn },
+        #{ branchDb },
+        #{ branchHn },
+        #{ branchSd },
+        #{ imageTotal },
+        #{ imageHb },
+        #{ imageHd },
+        #{ imageHz },
+        #{ imageXb },
+        #{ imageXn },
+        #{ imageDb },
+        #{ imageHn },
+        #{ imageSd },
+        #{ createBy },
+        to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss'),
+        #{ remarks },
+        #{ status }
+        )
+    </insert>
+
+    <update id="updateById">
+        update  "RRS_STATIC_BRANCH"
+        <set>
+            <if test="branchTotal != null and branchTotal != ''">
+                "BRANCH_TOTAL" = #{branchTotal},
+            </if>
+            <if test="branchHb != null and branchHb != ''">
+                "BRANCH_HB" = #{branchHb},
+            </if>
+            <if test="branchHd != null and branchHd != ''">
+                "BRANCH_HD" = #{branchHd},
+            </if>
+            <if test="branchHz != null and branchHz != ''">
+                "BRANCH_HZ" = #{branchHz},
+            </if>
+            <if test="branchXb != null and branchXb != ''">
+                "BRANCH_XB" = #{branchXb},
+            </if>
+            <if test="branchXn != null and branchXn != ''">
+                "BRANCH_XN" = #{branchXn},
+            </if>
+            <if test="branchDb != null and branchDb != ''">
+                "BRANCH_DB" = #{branchDb},
+            </if>
+            <if test="branchHn != null and branchHn != ''">
+                "BRANCH_HN" = #{branchHn},
+            </if>
+            <if test="branchSd != null and branchSd != ''">
+                "BRANCH_SD" = #{branchSd},
+            </if>
+            <if test="imageTotal != null and imageTotal != ''">
+                "IMAGE_TOTAL" = #{imageTotal},
+            </if>
+            <if test="imageHb != null and imageHb != ''">
+                "IMAGE_HB" = #{imageHb},
+            </if>
+            <if test="imageHd != null and imageHd != ''">
+                "IMAGE_HD" = #{imageHd},
+            </if>
+            <if test="imageHz != null and imageHz != ''">
+                "IMAGE_HZ" = #{imageHz},
+            </if>
+            <if test="imageXb != null and imageXb != ''">
+                "IMAGE_XB" = #{imageXb},
+            </if>
+            <if test="imageXn != null and imageXn != ''">
+                "IMAGE_XN" = #{imageXn},
+            </if>
+            <if test="imageDb != null and imageDb != ''">
+                "IMAGE_DB" = #{imageDb},
+            </if>
+            <if test="imageHn != null and imageHn != ''">
+                "IMAGE_HN" = #{imageHn},
+            </if>
+            <if test="imageSd != null and imageSd != ''">
+                "IMAGE_SD" = #{imageSd},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                "REMARKS" = #{remarks},
+            </if>
+            <if test="status != null and status != ''">
+                "STATUS" = #{status},
+            </if>
+            "UPDATE_BY" = #{updateBy},
+            "UPDATE_DATE" = to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')
+        </set>
+        where "ID"= #{id}
+    </update>
+    <!--查询网点好评率-->
+    <select id="getBranchPraise" resultType="staticBranch">
+        SELECT
+            "BRANCH_TOTAL" AS  branchTotal,
+            "BRANCH_HB"  AS  branchHb,
+            "BRANCH_HD" AS  branchHd,
+            "BRANCH_HZ" AS  branchHz,
+            "BRANCH_XB" AS  branchXb,
+            "BRANCH_XN" AS  branchXn,
+            "BRANCH_DB" AS  branchDb,
+            "BRANCH_HN" AS  branchHn,
+            "BRANCH_SD" AS  branchSd
+        FROM
+            RRS_STATIC_BRANCH
+    </select>
+    <select id="getImagePraise" resultType="staticBranch">
+        SELECT
+            "IMAGE_TOTAL" AS  imageTotal,
+            "IMAGE_HB" AS  imageHb,
+            "IMAGE_HD" AS  imageHd,
+            "IMAGE_HZ" AS  imageHz,
+            "IMAGE_XB" AS  imageXb,
+            "IMAGE_XN" AS  imageXn,
+            "IMAGE_DB" AS  imageDb,
+            "IMAGE_HN" AS  imageHn,
+            "IMAGE_SD" AS  imageSd
+        FROM
+            RRS_STATIC_BRANCH
+    </select>
+</mapper>

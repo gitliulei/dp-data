@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CompanyPublicity">
+    <sql id="columns">
+        ID AS id,
+        INTRODUCTION AS introduction,
+        VIDEO_PATH AS videoPath,
+        PARTNER_PATH AS partnerPath,
+        HONOR_PATH AS honorPath,
+        CREATE_BY AS createBy,
+        CREATE_DATE AS createDate,
+        UPDATE_BY AS updateBy,
+        UPDATE_DATE AS updateDate,
+        REMARKS AS remarks
+    </sql>
+    <!--查询所有-->
+    <select id="getAllPublicity" resultType="CompanyPublicity">
+      SELECT
+        <include refid="columns"/>
+      FROM
+	    "RRS_COMPANY_PUBLICITY"
+	  WHERE "STATUS"=0
+    </select>
+
+    <!--增加一条数据-->
+    <insert id="addPublicity" parameterType="companyPublicity" >
+        INSERT INTO RRS_COMPANY_PUBLICITY (
+        ID,
+        INTRODUCTION,
+        VIDEO_PATH,
+        PARTNER_PATH,
+        HONOR_PATH,
+        CREATE_BY,
+        CREATE_DATE,
+        REMARKS
+        )
+        VALUES
+        (
+        #{id},
+        #{introduction},
+        #{videoPath},
+        #{partnerPath},
+        #{honorPath},
+        #{createBy},
+        to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss'),
+        #{remarks}
+        )
+    </insert>
+    <!--修改-->
+    <update id="updatePublicityById" parameterType="net.astroway.yw.rrsdp.model.CompanyPublicity">
+        UPDATE "RRS_COMPANY_PUBLICITY"
+        <set>
+            <if test="introduction != null and introduction != ''">
+                "INTRODUCTION"=#{introduction},
+            </if>
+            <if test="videoPath != null and videoPath != ''">
+                "VIDEO_PATH"=#{videoPath},
+            </if>
+            <if test="partnerPath != null and partnerPath != ''">
+                "PARTNER_PATH"=#{partnerPath},
+            </if>
+            <if test="honorPath !=null and honorPath != ''">
+                "HONOR_PATH"=#{honorPath},
+            </if>
+            <if test="honorPath !=null and honorPath != ''">
+                "UPDATE_BY"=#{updateBy},
+            </if>
+            "UPDATE_DATE"=to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss'),
+            <if test="honorPath !=null and honorPath != ''">
+                "REMARKS"=#{remarks}
+            </if>
+        </set>
+        WHERE "ID"=#{id}
+    </update>
+    <!--根据id查询-->
+    <select id="getOnePublicity" parameterType="String" resultType="companyPublicity">
+        SELECT
+            <include refid="columns"/>
+          FROM
+            RRS_COMPANY_PUBLICITY
+          WHERE ID=#{id} AND STATUS=0
+    </select>
+    <!--删除-->
+    <update id="delPublicityById" parameterType="String">
+        UPDATE RRS_COMPANY_PUBLICITY
+        SET STATUS=1
+        WHERE ID=#{id}
+    </update>
+    <!--批量删除-->
+    <update id="batchDelById" parameterType="map">
+         UPDATE "RRS_COMPANY_PUBLICITY"
+        SET "STATUS"=1
+        WHERE "ID" IN
+        <foreach collection="ids" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--二级页面查询简介-->
+    <select id="getPublicIntroduction" resultType="companyPublicity">
+        SELECT
+        INTRODUCTION AS introduction,
+        VIDEO_PATH AS videoPath
+        FROM
+        RRS_COMPANY_PUBLICITY
+    </select>
+    <select id="getPublicPartner" resultType="companyPublicity">
+         SELECT
+            PARTNER_PATH AS partnerPath
+         FROM
+           RRS_COMPANY_PUBLICITY
+    </select>
+    <select id="getPublicHonor" resultType="companyPublicity">
+        SELECT
+            HONOR_PATH AS honorPath
+        FROM
+            RRS_COMPANY_PUBLICITY
+    </select>
+</mapper>

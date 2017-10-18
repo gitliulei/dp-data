@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaticHome">
+    <sql id="columns">
+        "ID" AS id,
+        "INTRODUCTION" AS introduction,
+        "WARE_AREA" AS wareArea,
+        "TC_TOTAL" AS tcTotal,
+        "FRONT_TOTAL" AS frontTotal,
+        "CDC_TOTAL" AS cdcTotal,
+        "IS_MONITOR" AS isMonitor,
+        "NO_MONITOR" AS noMonitor,
+        "COUNTY" AS county,
+        "BRANCH" AS branch,
+        "CAR_TOTAL" AS carTotal,
+        "PEOPLE_TOTAL" AS peopleTotal,
+        "TRUNK_CAR" AS trunkCar,
+        "AREA_CAR" AS areaCar,
+        "LAST_CAR" AS lastCar,
+        "REGISTER_CAR" AS registerCar,
+        "ACTIVE_CAR" AS activeCar,
+        "ORDER_CAR" AS orderCar,
+        "TRUNK_DAY" AS trunkDay,
+        "TRUNK_ARRIVAL" AS trunkArrival,
+        "TRUNK_SEND" AS trunkSend,
+        "TRUNK_TOTAL" AS trunkTotal,
+        "BASE_TOTAL" AS baseTotal,
+        "CENTER_ARRIVAL" AS centerArrival,
+        "CENTER_SEND" AS centerSend,
+        "BRANCH_SHOP" AS branchShop,
+        "IMAGE_SHOP" AS imageShop,
+        "CREATE_BY" AS createBy,
+        "CREATE_DATE" AS createDate,
+        "UPDATE_BY" AS updateBy,
+        "UPDATE_DATE" AS updateDate,
+        "REMARKS" AS remarks,
+        "STATUS" AS status
+    </sql>
+    <select id="getAll" resultType="staticHome">
+        SELECT
+        <include refid="columns" />
+        FROM
+        "RRS_STATIC_HOME"
+    </select>
+
+    <insert id="insert" parameterType="StaticHome" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO "RRS_STATIC_HOME"
+        (
+            "ID",
+            "INTRODUCTION",
+            "WARE_AREA",
+            "TC_TOTAL",
+            "FRONT_TOTAL",
+            "CDC_TOTAL",
+            "IS_MONITOR",
+            "NO_MONITOR",
+            "COUNTY",
+            "BRANCH",
+            "CAR_TOTAL",
+            "PEOPLE_TOTAL",
+            "TRUNK_CAR",
+            "AREA_CAR",
+            "LAST_CAR",
+            "REGISTER_CAR",
+            "ACTIVE_CAR",
+            "ORDER_CAR",
+            "TRUNK_DAY",
+            "TRUNK_ARRIVAL",
+            "TRUNK_SEND",
+            "TRUNK_TOTAL",
+            "BASE_TOTAL",
+            "CENTER_ARRIVAL",
+            "CENTER_SEND",
+            "BRANCH_SHOP",
+            "IMAGE_SHOP",
+            "CREATE_BY",
+            "CREATE_DATE",
+            "REMARKS",
+            "STATUS"
+        )
+        VALUES
+        (
+        #{ id },
+        #{ introduction },
+        #{ wareArea },
+        #{ tcTotal },
+        #{ frontTotal },
+        #{ cdcTotal },
+        #{ isMonitor },
+        #{ noMonitor },
+        #{ county },
+        #{ branch },
+        #{ carTotal },
+        #{ peopleTotal },
+        #{ trunkCar },
+        #{ areaCar },
+        #{ lastCar },
+        #{ registerCar },
+        #{ activeCar },
+        #{ orderCar },
+        #{ trunkDay },
+        #{ trunkArrival },
+        #{ trunkSend },
+        #{ trunkTotal },
+        #{ baseTotal },
+        #{ centerArrival },
+        #{ centerSend },
+        #{ branchShop },
+        #{ imageShop },
+        #{ createBy },
+        to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss'),
+        #{ remarks },
+        #{ status }
+          )
+    </insert>
+
+    <update id="updateById">
+        update  "RRS_STATIC_HOME"
+        <set>
+            <if test="introduction != null and introduction != ''">
+                "INTRODUCTION" = #{introduction},
+            </if>
+            <if test="wareArea != null and wareArea != ''">
+                "WARE_AREA" = #{wareArea},
+            </if>
+            <if test="tcTotal != null and tcTotal != ''">
+                "TC_TOTAL" = #{tcTotal},
+            </if>
+            <if test="frontTotal != null and frontTotal != ''">
+                "FRONT_TOTAL" = #{frontTotal},
+            </if>
+            <if test="cdcTotal != null and cdcTotal != ''">
+                "CDC_TOTAL" = #{cdcTotal},
+            </if>
+            <if test="isMonitor != null and isMonitor != ''">
+                "IS_MONITOR" = #{isMonitor},
+            </if>
+            <if test="noMonitor != null and noMonitor != ''">
+                "NO_MONITOR" = #{noMonitor},
+            </if>
+            <if test="county != null and county != ''">
+                "COUNTY" = #{county},
+            </if>
+            <if test="branch != null and branch != ''">
+                "BRANCH" = #{branch},
+            </if>
+            <if test="carTotal != null and carTotal != ''">
+                "CAR_TOTAL" = #{carTotal},
+            </if>
+            <if test="peopleTotal != null and peopleTotal != ''">
+                "PEOPLE_TOTAL" = #{peopleTotal},
+            </if>
+            <if test="trunkCar != null and trunkCar != ''">
+                "TRUNK_CAR" = #{trunkCar},
+            </if>
+            <if test="areaCar != null and areaCar != ''">
+                "AREA_CAR" = #{areaCar},
+            </if>
+            <if test="lastCar != null and lastCar != ''">
+                "LAST_CAR" = #{lastCar},
+            </if>
+            <if test="registerCar != null and registerCar != ''">
+                "REGISTER_CAR" = #{registerCar},
+            </if>
+            <if test="activeCar != null and activeCar != ''">
+                "ACTIVE_CAR" = #{activeCar},
+            </if>
+            <if test="orderCar != null and orderCar != ''">
+                "ORDER_CAR" = #{orderCar},
+            </if>
+            <if test="trunkDay != null and trunkDay != ''">
+                "TRUNK_DAY" = #{trunkDay},
+            </if>
+            <if test="trunkArrival != null and trunkArrival != ''">
+                "TRUNK_ARRIVAL" = #{trunkArrival},
+            </if>
+            <if test="trunkSend != null and trunkSend != ''">
+                "TRUNK_SEND" = #{trunkSend},
+            </if>
+            <if test="trunkTotal != null and trunkTotal != ''">
+                "TRUNK_TOTAL" = #{trunkTotal},
+            </if>
+            <if test="baseTotal != null and baseTotal != ''">
+                "BASE_TOTAL" = #{baseTotal},
+            </if>
+            <if test="centerArrival != null and centerArrival != ''">
+                "CENTER_ARRIVAL" = #{centerArrival},
+            </if>
+            <if test="centerSend != null and centerSend != ''">
+                "CENTER_SEND" = #{centerSend},
+            </if>
+            <if test="branchShop != null and branchShop != ''">
+                "BRANCH_SHOP" = #{branchShop},
+            </if>
+            <if test="imageShop != null and imageShop != ''">
+                "IMAGE_SHOP" = #{imageShop},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                "REMARKS" = #{remarks},
+            </if>
+            <if test="status != null and status != ''">
+                "STATUS" = #{status},
+            </if>
+            "UPDATE_BY" = #{updateBy},
+            "UPDATE_DATE" = to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')
+        </set>
+        where "ID"= #{id}
+    </update>
+
+    <select id="getStaticWarehouseInfo" resultType="staticHome">
+        SELECT
+        "WARE_AREA" AS wareArea,
+        "TC_TOTAL" AS tcTotal,
+        "FRONT_TOTAL" AS frontTotal,
+        "CDC_TOTAL" AS cdcTotal
+        FROM
+        "RRS_STATIC_HOME"
+    </select>
+
+    <select id="getStaticWarehouseDistributed" resultType="staticHome">
+        SELECT
+        "IS_MONITOR" AS isMonitor,
+        "NO_MONITOR" AS noMonitor
+        FROM
+        "RRS_STATIC_HOME"
+    </select>
+
+    <select id="getStaticHomeCenter" resultType="staticHome">
+        SELECT
+        "COUNTY" AS county,
+        "BRANCH" AS branch,
+        "CAR_TOTAL" AS carTotal,
+        "PEOPLE_TOTAL" AS peopleTotal,
+        "TRUNK_CAR" AS trunkCar,
+        "AREA_CAR" AS areaCar,
+        "LAST_CAR" AS lastCar,
+        "REGISTER_CAR" AS registerCar,
+        "ACTIVE_CAR" AS activeCar,
+        "ORDER_CAR" AS orderCar
+        FROM
+        "RRS_STATIC_HOME"
+    </select>
+
+
+    <select id="getStaticTrunkPunctuality" resultType="staticHome">
+        SELECT
+        TRUNK_DAY AS trunkDay,
+        TRUNK_ARRIVAL AS trunkArrival,
+        TRUNK_SEND AS trunkSend
+        FROM
+        RRS_STATIC_HOME
+    </select>
+
+    <select id="getStaticTrunkDistributionMap" resultType="staticHome">
+        SELECT
+        TRUNK_TOTAL AS trunkTotal,
+        BASE_TOTAL AS baseTotal
+        FROM
+        RRS_STATIC_HOME
+    </select>
+
+    <select id="getStaticCenterPunctuality" resultType="staticHome">
+        SELECT
+        CENTER_ARRIVAL AS centerArrival,
+        CENTER_SEND AS centerSend
+        FROM
+        RRS_STATIC_HOME
+    </select>
+
+    <select id="getStaticShopDistributionMap" resultType="staticHome">
+        SELECT
+        BRANCH_SHOP AS branchShop,
+        IMAGE_SHOP AS imageShop
+        FROM
+        RRS_STATIC_HOME
+    </select>
+
+</mapper>

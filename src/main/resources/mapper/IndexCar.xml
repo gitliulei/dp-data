@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IndexCar">
+    <sql id="columns">
+        INDEX_ID AS indexId,
+        SOURCE AS source,
+        PROVINCE AS province,
+        CITY AS city,
+        REGION_ID AS regionId,
+        REGION_NAME AS regionName,
+        TRADE_ID AS  tradeId,
+        TRADE_NAME AS tradeName,
+        CENTER_ID AS centerId,
+        CENTER_NAME AS centerName,
+        DATE_DT AS dateDt,
+        DATE_TIME AS dateTime,
+        INDEX_VALUE AS indexValue,
+        INDEX_ALL AS indexAll,
+        ETL_DT AS etlDt,
+        INDEX_VALUE AS indexType,
+        DRIVER_NAME AS driverName,
+        CONTACT AS contact,
+        CAR_NUMBER AS carNumber,
+        CAR_MODEL AS carModel,
+        CAR_IMAGE AS carImage,
+        START_ADDRESS AS starAddress,
+        END_ADDRESS AS endAddress
+    </sql>
+    <select id="getTypeNum" resultType="IndexCar">
+        SELECT
+            INDEX_TYPE AS indexType,
+            sum(index_value) AS indexValue
+        FROM
+            RRS_INDEX_CAR
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID=#{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID=#{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND TRADE_ID=#{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND CENTER_ID=#{centerId}
+            </if>
+        </where>
+        GROUP BY
+          INDEX_TYPE
+    </select>
+    <select id="getCarInfo" resultType="IndexCar">
+        SELECT
+        DRIVER_NAME AS driverName,
+        CONTACT AS contact,
+        CAR_NUMBER AS carNumber,
+        CAR_IMAGE AS carImage,
+        START_ADDRESS AS starAddress,
+        END_ADDRESS AS endAddress,
+        FROM
+        RRS_INDEX_CAR
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND TRADE_ID  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND CENTER_ID  = #{centerId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getIndexCar" resultType="IndexCar">
+        SELECT
+        DRIVER_NAME AS driverName,
+        CONTACT AS contact,
+        CAR_NUMBER AS carNumber,
+        CAR_IMAGE AS carImage,
+        START_ADDRESS AS starAddress,
+        END_ADDRESS AS endAddress,
+        INDEX_VALUE as indexValue
+        FROM
+        RRS_INDEX_CAR
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND TRADE_ID  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND CENTER_ID  = #{centerId}
+            </if>
+        </where>
+    </select>
+</mapper>

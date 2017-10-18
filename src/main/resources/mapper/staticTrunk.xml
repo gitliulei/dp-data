@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaticTrunk">
+    <sql id="columns">
+        INDEX_ID AS indexId,
+        THROUGHPUT AS throughput,
+        THROUGHPUT_SHIP AS throughputShip,
+        THROUGHPUT_TRUNK AS throughputTrunk,
+        REGION_NAME AS regionName,
+        SHIP_PUNCTUALITY AS shipPunctuality,
+        ARRIVAL_PUNCTUALITY AS arivalPunctuality,
+        SHIP_NUMBER AS shipNumber,
+        TRUNK_NUMBER AS trunkNumber,
+        TRUNK_TRANSPORT_TIME AS trunkTransportTime,
+        CENTER_TRANSPORT_TIME AS centerTransportTime
+    </sql>
+
+    <select id="getThroughput" resultType="StaticTrunk">
+        select
+        throughput
+        from
+        rrs_static_trunk
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND "INDEX_ID"  = #{indexId}
+            </if>
+            and throughput is not null
+        </where>
+    </select>
+
+    <select id="findThroughputList" resultType="StaticTrunk">
+        select
+        region_name AS regionName,
+        sum(throughput_ship) AS throughputShip,
+        sum(throughput_trunk) AS throughputTrunk
+        from
+        rrs_static_trunk
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND "INDEX_ID"  = #{indexId}
+            </if>
+            and throughput_ship is not null and throughput_trunk is not null
+        </where>
+        group by region_name
+    </select>
+
+    <select id="getPunctuality" resultType="StaticTrunk">
+        SELECT
+            SHIP_PUNCTUALITY AS shipPunctuality,
+            ARRIVAL_PUNCTUALITY AS arivalPunctuality
+        FROM
+            RRS_STATIC_TRUNK
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND index_id = #{indexId}
+            </if>
+        </where>
+    </select>
+    <select id="getJDNumber"  resultType="staticTrunk">
+        SELECT
+          SHIP_NUMBER AS shipNumber,
+          TRUNK_NUMBER AS trunkNumber
+        FROM
+          RRS_STATIC_TRUNK
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID = #{indexId}
+            </if>
+        </where>
+    </select>
+    <select id="getTransportList" resultType="StaticTrunk">
+        SELECT
+            trunk_transport_time AS trunkTransportTime,
+            center_transport_time AS centerTransportTime
+        FROM
+          rrs_static_trunk
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND index_id = #{indexId}
+            </if>
+        </where>
+    </select>
+</mapper>

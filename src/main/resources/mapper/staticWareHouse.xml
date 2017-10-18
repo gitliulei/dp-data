@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaticWareHouse">
+    <sql id="columns">
+        "ID" AS id,
+        "WARE_AREA" AS wareArea,
+        "TC_AREA" AS tcArea,
+        "FRONT_AREA" AS frontArea,
+        "CDC_AREA" AS cdcArea,
+        "TC_TOTAL" AS tcTotal,
+        "FRONT_TOTAL" AS frontTotal,
+        "CDC_TOTAL" AS cdcTotal,
+        "HB_AREA" AS hbArea,
+        "HD_AREA" AS hdArea,
+        "HN_AREA" AS hnArea,
+        "HZ_AREA" AS hzArea,
+        "SD_AREA" AS sdArea,
+        "XN_AREA" AS xnArea,
+        "XB_AREA" AS xbArea,
+        "DB_AREA" AS dbArea,
+        "HB_TOTAL" AS hbTotal,
+        "DB_TOTAL" AS dbTotal,
+        "XN_TOTAL" AS xnTotal,
+        "XB_TOTAL" AS xbTotal,
+        "HD_TOTAL" AS hdTotal,
+        "SD_TOTAL" AS sdTotal,
+        "HZ_TOTAL" AS hzTotal,
+        "HN_TOTAL" AS hnTotal,
+        "CREATE_BY" AS createBy,
+        "CREATE_DATE" AS createDate,
+        "UPDATE_BY" AS updateBy,
+        "UPDATE_DATE" AS updateDate,
+        "REMARKS" AS remarks,
+        "STATUS" AS status
+    </sql>
+
+    <select id="getAll" resultType="staticWareHouse">
+        SELECT
+        <include refid="columns" />
+        FROM
+        "RRS_STATIC_WAREHOUSE"
+    </select>
+
+    <update id="updateById">
+        update  "RRS_STATIC_WAREHOUSE"
+        <set>
+            <if test="wareArea != null and wareArea != ''">
+                "WARE_AREA" = #{wareArea},
+            </if>
+            <if test="tcArea != null and tcArea != ''">
+                "TC_AREA" = #{tcArea},
+            </if>
+            <if test="frontArea != null and frontArea != ''">
+                "FRONT_AREA" = #{frontArea},
+            </if>
+            <if test="cdcArea != null and cdcArea != ''">
+                "CDC_AREA" = #{cdcArea},
+            </if>
+            <if test="tcTotal != null and tcTotal != ''">
+                "TC_TOTAL" = #{tcTotal},
+            </if>
+            <if test="frontTotal != null and frontTotal != ''">
+                "FRONT_TOTAL" = #{frontTotal},
+            </if>
+            <if test="cdcTotal != null and cdcTotal != ''">
+                "CDC_TOTAL" = #{cdcTotal},
+            </if>
+            <if test="hbArea != null and hbArea != ''">
+                "HB_AREA" = #{hbArea},
+            </if>
+            <if test="hdArea != null and hdArea != ''">
+                "HD_AREA" = #{hdArea},
+            </if>
+            <if test="hnArea != null and hnArea != ''">
+                "HN_AREA" = #{hnArea},
+            </if>
+            <if test="hzArea != null and hzArea != ''">
+                "HZ_AREA" = #{hzArea},
+            </if>
+            <if test="sdArea != null and sdArea != ''">
+                "SD_AREA" = #{sdArea},
+            </if>
+            <if test="xnArea != null and xnArea != ''">
+                "XN_AREA" = #{xnArea},
+            </if>
+            <if test="xbArea != null and xbArea != ''">
+                "XB_AREA" = #{xbArea},
+            </if>
+            <if test="dbArea != null and dbArea != ''">
+                "DB_AREA" = #{dbArea},
+            </if>
+            <if test="hbTotal != null and hbTotal != ''">
+                "HB_TOTAL" = #{hbTotal},
+            </if>
+            <if test="dbTotal != null and dbTotal != ''">
+                "DB_TOTAL" = #{dbTotal},
+            </if>
+            <if test="xnTotal != null and xnTotal != ''">
+                "XN_TOTAL" = #{xnTotal},
+            </if>
+            <if test="xbTotal != null and xbTotal != ''">
+                "XB_TOTAL" = #{xbTotal},
+            </if>
+            <if test="hdTotal != null and hdTotal != ''">
+                "HD_TOTAL" = #{hdTotal},
+            </if>
+            <if test="sdTotal != null and sdTotal != ''">
+                "SD_TOTAL" = #{sdTotal},
+            </if>
+            <if test="hzTotal != null and hzTotal != ''">
+                "HZ_TOTAL" = #{hzTotal},
+            </if>
+            <if test="hnTotal != null and hnTotal != ''">
+                "HN_TOTAL" = #{hnTotal},
+            </if>
+            <if test="remarks != null and remarks != ''">
+                "REMARKS" = #{remarks},
+            </if>
+            <if test="status != null and status != ''">
+                "STATUS" = #{status},
+            </if>
+            "UPDATE_BY" = #{updateBy},
+            "UPDATE_DATE" = to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')
+        </set>
+        where "ID"= #{id}
+    </update>
+    <insert id="insert" parameterType="staticWareHouse" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO "RRS_STATIC_WAREHOUSE"
+        (
+             "ID",
+             "WARE_AREA",
+             "TC_AREA",
+             "FRONT_AREA",
+             "CDC_AREA",
+             "TC_TOTAL",
+             "FRONT_TOTAL",
+             "CDC_TOTAL",
+             "HB_AREA",
+             "HD_AREA",
+             "HN_AREA",
+             "HZ_AREA",
+             "SD_AREA",
+             "XN_AREA",
+             "XB_AREA",
+             "DB_AREA",
+             "HB_TOTAL",
+             "DB_TOTAL",
+             "XN_TOTAL",
+             "XB_TOTAL",
+             "HD_TOTAL",
+             "SD_TOTAL",
+             "HZ_TOTAL",
+             "HN_TOTAL",
+             "CREATE_BY",
+             "CREATE_DATE",
+             "REMARKS",
+             "STATUS"
+        )
+        VALUES
+        (
+            #{ id },
+            #{ wareArea },
+            #{ tcArea },
+            #{ frontArea },
+            #{ cdcArea },
+            #{ tcTotal },
+            #{ frontTotal },
+            #{ cdcTotal },
+            #{ hbArea },
+            #{ hdArea },
+            #{ hnArea },
+            #{ hzArea },
+            #{ sdArea },
+            #{ xnArea },
+            #{ xbArea },
+            #{ dbArea },
+            #{ hbTotal },
+            #{ dbTotal },
+            #{ xnTotal },
+            #{ xbTotal },
+            #{ hdTotal },
+            #{ sdTotal },
+            #{ hzTotal },
+            #{ hnTotal },
+            #{ createBy },
+            to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss'),
+            #{ remarks },
+            #{ status }
+        )
+    </insert>
+
+    <select id="getStaticWareHouseInfo" resultType="staticWareHouse">
+        SELECT
+        "ID" AS id,
+        "WARE_AREA" AS  wareArea,
+        "TC_AREA" AS  tcArea,
+        "FRONT_AREA" AS  frontArea,
+        "CDC_AREA" AS  cdcArea,
+        "TC_TOTAL" AS  tcTotal,
+        "FRONT_TOTAL" AS  frontTotal,
+        "CDC_TOTAL" AS  cdcTotal
+        FROM
+        "RRS_STATIC_WAREHOUSE"
+        WHERE STATUS ='0'
+    </select>
+
+    <select id="getStaticRegionWareHouseInfo" resultType="staticWareHouse">
+        SELECT
+        "ID" AS id,
+        "HB_AREA" AS  hbArea,
+        "HD_AREA" AS  hdArea,
+        "HN_AREA" AS  hnArea,
+        "HZ_AREA" AS  hzArea,
+        "SD_AREA" AS  sdArea,
+        "XN_AREA" AS  xnArea,
+        "XB_AREA" AS  xbArea,
+        "DB_AREA" AS  dbArea,
+        "HB_TOTAL" AS  hbTotal,
+        "DB_TOTAL" AS  dbTotal,
+        "XN_TOTAL" AS  xnTotal,
+        "XB_TOTAL" AS  xbTotal,
+        "HD_TOTAL" AS  hdTotal,
+        "SD_TOTAL" AS  sdTotal,
+        "HZ_TOTAL" AS  hzTotal,
+        "HN_TOTAL" AS  hnTotal
+        FROM
+        "RRS_STATIC_WAREHOUSE"
+        WHERE STATUS ='0'
+    </select>
+</mapper>

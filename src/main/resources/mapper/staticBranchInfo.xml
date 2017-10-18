@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaticBranchInfo">
+    <select id="getAll" resultType="staticBranchInfo">
+        SELECT
+        "ID" AS  id,
+        "GONGMAO_NAME" AS  gongmaoName,
+        "BRANCH_NAME" AS  branchName,
+        "BRANCH_REGION" AS  branchRegion,
+        "TELEPHONE" AS  telephone,
+        "POSITION" AS  position,
+        "LONGITUDE" AS  longitude,
+        "LATITUDE" AS  latitude,
+        "DOT_IMAGE" AS dotImage,
+        "TYPE" AS  type
+        FROM
+        RRS_STATIC_BRANCH_INFO
+        <where>
+            1 = 1
+            <if test="type != null and type != ''">
+                AND TYPE  = #{type}
+            </if>
+        </where>
+    </select>
+</mapper>

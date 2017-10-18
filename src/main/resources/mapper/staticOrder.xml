@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaticOrder">
+    <sql id="columns">
+        "ID",
+       "ORDER_TOTAL" AS orderTotal,
+       "USER_PRAISE" AS userPrais,
+       "HB_AREA" AS hbArea,
+       "HD_AREA" AS hdArea,
+       "HZ_AREA" AS hzArea,
+       "XB_AREA" AS xbArea,
+       "XN_AREA" AS  xnArea,
+        "DB_AREA" AS  dbArea,
+        "HN_AREA" AS hnArea,
+        "SD_AREA" AS sdArea,
+        "CREATE_BY" AS createBy,
+        "CREATE_DATE" AS createDate,
+        "UPDATE_BY" AS updateBy,
+        "UPDATE_DATE" AS updateDate,
+        "REMARKS" AS remarks
+    </sql>
+    <!--查询所有-->
+    <select id="getAllOrder" resultType="staticOrder">
+      SELECT
+       <include refid="columns"/>
+    FROM
+	"RRS_STATIC_ORDER"
+	WHERE "STATUS"=0
+    </select>
+    <!--增加一条数据-->
+    <insert id="addOrder" parameterType="staticOrder" >
+        INSERT INTO RRS_STATIC_ORDER (
+        "ID",
+        ORDER_TOTAL,
+        USER_PRAISE,
+        HB_AREA,
+        HD_AREA,
+        HZ_AREA,
+        XB_AREA,
+        XN_AREA,
+        DB_AREA,
+        HN_AREA,
+        SD_AREA,
+        CREATE_BY,
+        CREATE_DATE,
+        REMARKS
+        )
+        VALUES
+        (
+        #{id},
+        #{orderTotal},
+        #{userPrais},
+        #{hbArea},
+        #{hdArea},
+        #{hzArea},
+        #{xbArea},
+        #{xnArea},
+        #{dbArea},
+        #{hnArea},
+        #{sdArea},
+        #{createBy},
+        to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss'),
+        #{remarks}
+        )
+    </insert>
+    <!--修改-->
+    <update id="updateOrderById" parameterType="staticOrder">
+        UPDATE RRS_STATIC_ORDER
+        <set>
+            <if test="orderTotal != null and orderTotal != ''">
+                ORDER_TOTAL=#{orderTotal},
+            </if>
+            <if test="userPrais != null and userPrais != ''">
+                USER_PRAISE=#{userPrais},
+            </if>
+            <if test="hbArea != null and hbArea != ''">
+                HB_AREA=#{hbArea},
+            </if>
+            <if test="hdArea != null and hdArea != ''">
+                HD_AREA=#{hdArea},
+            </if>
+            <if test="hzArea != null and hzArea != ''">
+                HZ_AREA=#{hzArea},
+            </if>
+            <if test="xbArea != null and xbArea != ''">
+                XB_AREA=#{xbArea},
+            </if>
+            <if test="xnArea != null and xnArea != ''">
+                XN_AREA=#{xnArea},
+            </if>
+            <if test="hbArea != null and hbArea != ''">
+                DB_AREA=#{dbArea},
+            </if>
+            <if test="hnArea != null and hnArea != ''">
+                HN_AREA=#{hnArea},
+            </if>
+            <if test="sdArea != null and sdArea != ''">
+                SD_AREA=#{sdArea},
+            </if>
+            <if test="hbArea != null and hbArea != ''">
+                UPDATE_BY=#{updateBy},
+            </if>
+            UPDATE_DATE=to_timestamp(to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss'),
+            <if test="remarks != null and remarks != ''">
+                REMARKS=#{remarks}
+            </if>
+        </set>
+        WHERE "ID"=#{id}
+    </update>
+    <!--根据id查询-->
+    <select id="getOneOrder" parameterType="String" resultType="staticOrder">
+        SELECT
+          <include refid="columns"/>
+        FROM
+        "RRS_ORDER"
+        WHERE "ID"=#{id} AND "STATUS"=0
+    </select>
+    <!--删除-->
+    <update id="delOrderById" parameterType="String">
+        UPDATE "RRS_STATIC_ORDER"
+        SET "STATUS"=1
+        WHERE "ID"=#{id}
+    </update>
+    <select id="getOrderTocal" resultType="staticOrder">
+        SELECT
+          ORDER_TOTAL AS orderTotal
+        FROM
+          RRS_STATIC_ORDER
+    </select>
+    <select id="getUserPrais" resultType="staticOrder">
+	        SELECT
+                USER_PRAISE AS userPrais,
+                HB_AREA AS hbArea,
+                HD_AREA AS hdArea,
+                HZ_AREA AS hzArea,
+                XB_AREA AS xbArea,
+                XN_AREA AS xnArea,
+                DB_AREA AS dbArea,
+                HN_AREA AS hnArea,
+                SD_AREA AS sdArea
+            FROM
+                RRS_STATIC_ORDER
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+spring:
+# 应用名
+  application:
+    name: yw-rrsdp
+# 关闭注册中心健康检查
+  cloud:
+    consul:
+      discovery:
+        register-health-check: false
+# mybatis
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  typeAliasesPackage: net.astroway.yw.rrsdp.model,net.astroway.yw.rrsdp.controller.form,net.astroway.yw.rrsdp.controller.report.form
+# 暂时不需要hystrix。另外开启的时候注意采用信号量模式，不要采用线程池模式，不然SessionUtil会取不到与线程绑定的Request
+feign:
+  hystrix:
+    enabled: false
+
+# 使用https协议发送request请求
+#ribbon:
+#  IsSecure: true
+# 日志
+logging:
+  file: logs/${spring.application.name}.log

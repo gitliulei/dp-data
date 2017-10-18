@@ -1,0 +1,29 @@
+# 应用端口号
+server:
+  port: 14758
+#Https配置
+#  ssl:
+#    key-store: classpath:cer/certificate-dev.p12
+#    key-store-password: Astroway2016
+spring:
+# 数据源
+  datasource:
+      driverClassName: oracle.jdbc.driver.OracleDriver
+      url: jdbc:oracle:thin:@10.138.46.208:1521:ORCL
+      username: rrs
+      password: wldp@102A
+      validationQuery: SELECT '*' FROM DUAL
+      defaultTransactionIsolation: 2
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+  cloud:
+# 注册中心端口号和域名，一套环境对应一个注册中心
+    consul:
+      host: 127.0.0.1
+      port: 8500
+# 被注册的服务域名，服务名相同，但环境不同，注册中心不同，注册进去的域名不同
+      discovery:
+        hostname: localhost

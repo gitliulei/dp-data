@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IndexOrder">
+
+    <sql id="columns">
+        "REGION_ID" AS  regionId,
+        "REGION_NAME" AS  regionName,
+        "TRADE_ID"  AS  tradeId,
+        "TRADE_NAME" AS  tradeName,
+        "CENTER_ID" AS  centerId,
+        "CENTER_NAME" AS  centerName,
+        "DATE_DT" AS  dateDt,
+        "INDEX_VALUE" AS  indexValue,
+        "INDEX_ALL" AS  indexAll,
+        "INDEX_ID" AS  indexId,
+        "ETL_DT" AS  etlDt
+    </sql>
+
+    <select id="findTrendList" resultType="IndexOrder">
+        SELECT
+        sum(index_value) as indexValue,
+        date_dt as dateDt
+        FROM
+        (select a.index_id,a.region_id,a.trade_id,a.center_id,a.index_value,
+        substr(a.date_dt,0,8) date_dt from rrs_index_order a)
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND index_id  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND region_id  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND trade_id  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND center_id  = #{centerId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &gt; = to_date(#{startDate},'yyyymmdd')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &lt; = to_date(#{endDate},'yyyymmdd')
+            </if>
+        </where>
+        group by date_dt order by date_dt
+    </select>
+
+    <select id="getIndexPercent" resultType="indexOrderDTO">
+        SELECT SUM(INDEX_VALUE) AS indexValueNum,SUM(INDEX_ALL) AS indexAllNum
+        FROM
+        "RRS_INDEX_ORDER"
+        <where>
+            <if test="regionId != null and regionId != ''">
+                AND "REGION_ID"  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND "TRADE_ID"  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND "CENTER_ID"  = #{centerId}
+            </if>
+            <if test="indexId != null and indexId != ''">
+                AND "INDEX_ID"  = #{indexId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &gt; = to_date(#{startDate},'yyyymmdd')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &lt; = to_date(#{endDate},'yyyymmdd')
+            </if>
+        </where>
+    </select>
+
+    <select id="getValidOrderList" resultType="IndexOrderDTO">
+        SELECT
+        sum(INDEX_VALUE) as indexValueNum,
+        DATE_TIME as dateTime
+        FROM
+        (select a.INDEX_ID,a.REGION_ID,a.TRADE_ID,a.CENTER_ID,a.INDEX_VALUE,
+         DATE_DT, DATE_TIME from RRS_INDEX_ORDER a)
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND TRADE_ID  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND CENTER_ID  = #{centerId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd')  = to_date(#{startDate},'yyyymmdd')
+            </if>
+        </where>
+        group by DATE_TIME order by DATE_TIME
+    </select>
+
+    <select id="getAllHertMap" resultType="IndexOrderDTO">
+        SELECT SUM(INDEX_VALUE) AS indexAllNum, REGION_NAME AS regionName,REGION_ID AS regionId
+        FROM RRS_INDEX_ORDER
+        <where>
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+        </where>
+        GROUP BY REGION_NAME,REGION_ID
+    </select>
+
+    <select id="getRegionHertMap" resultType="IndexOrderDTO">
+        SELECT SUM(INDEX_VALUE) AS indexValueNum,TRADE_ID AS tradeId,TRADE_NAME AS tradeName
+        FROM RRS_INDEX_ORDER
+        <where>
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID  = #{regionId}
+            </if>
+        </where>
+        GROUP BY TRADE_ID,TRADE_NAME
+    </select>
+
+    <select id="getTradeHertMap" resultType="IndexOrderDTO">
+        SELECT CENTER_ID AS centerId, CENTER_NAME AS centerName, LONGITUDE AS longitude, LATITUDE AS latitude, SUM(INDEX_VALUE) AS indexValueNum
+        FROM(
+        SELECT a.CENTER_ID,a.CENTER_NAME,b.LONGITUDE,b.LATITUDE,a.INDEX_VALUE
+        FROM RRS_INDEX_ORDER a
+        LEFT JOIN RRS_REGION_DIM b
+        ON a.CENTER_ID = b.CENTER_ID
+        <where>
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND a.REGION_ID  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND a.TRADE_ID  = #{tradeId}
+            </if>
+        </where>
+        )
+        GROUP BY CENTER_ID,CENTER_NAME,LONGITUDE,LATITUDE
+    </select>
+
+    <select id="findOrderRankingRegionIdList" resultType="IndexOrder">
+        SELECT
+        region_id as regionId,region_name as regionName,sum(index_value) as indexValue,sum(index_all) as indexAll
+        FROM
+        "RRS_INDEX_ORDER"
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND "INDEX_ID"  = #{indexId}
+            </if>
+             and substr(date_dt,0,4) = (select  to_char(sysdate, 'yyyy' )  from dual) group by region_id,region_name
+        </where>
+    </select>
+
+    <select id="findOrderRankingTradeIdList" resultType="IndexOrder">
+        SELECT
+        trade_id as tradeId,trade_name as tradeName,sum(index_value) as indexValue,sum(index_all) as indexAll
+        FROM
+        "RRS_INDEX_ORDER"
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND "INDEX_ID"  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND "REGION_ID"  = #{regionId}
+            </if>
+            and substr(date_dt,0,4) = (select  to_char(sysdate, 'yyyy' )  from dual) group by trade_id,trade_name
+        </where>
+    </select>
+
+    <select id="findOrderRankingCenterIdList" resultType="IndexOrder">
+        SELECT
+        center_id as centerId,center_name as centerName,sum(index_value) as indexValue,sum(index_all) as indexAll
+        FROM
+        "RRS_INDEX_ORDER"
+        <where>
+            1=1
+            <if test="indexId != null and indexId != ''">
+                AND "INDEX_ID"  = #{indexId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND "TRADE_ID"  = #{tradeId}
+            </if>
+            AND substr(date_dt,0,4) = (select  to_char(sysdate, 'yyyy' )  from dual) group by center_id,center_name
+        </where>
+    </select>
+
+    <select id="getValidOrderNumByHour" resultType="indexOrderDTO">
+        SELECT
+        sum(INDEX_VALUE) as orderNum
+        FROM
+        RRS_INDEX_ORDER
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND TRADE_ID  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND CENTER_ID  = #{centerId}
+            </if>
+            <if test="dateDt != null and dateDt != ''">
+                AND DATE_DT = #{dateDt}
+            </if>
+            <if test="dateTime != null and dateTime != ''">
+                AND DATE_TIME = #{dateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="getValidOrderNum" resultType="indexOrderDTO">
+        SELECT
+        sum(INDEX_VALUE) as indexValueNum
+        FROM
+        RRS_INDEX_ORDER
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND TRADE_ID  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND CENTER_ID  = #{centerId}
+            </if>
+            <if test="dateDt != null and dateDt != ''">
+                AND DATE_DT = #{dateDt}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTwoLevelIndexPercent" resultType="indexOrderDTO">
+        SELECT SUM(INDEX_VALUE) AS indexValue,SUM(INDEX_ALL) AS indexAll
+        FROM
+        "RRS_INDEX_ORDER"
+        <where>
+            <if test="dateDt != null and dateDt != ''">
+                AND "DATE_DT"  = #{dateDt}
+            </if>
+        </where>
+    </select>
+
+    <select id="getFinishRate" resultType="indexOrder">
+        SELECT
+        sum(index_value) as indexValue,
+        sum(index_all) as indexAll
+        FROM
+        RRS_INDEX_ORDER
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND INDEX_ID  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND REGION_ID  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND TRADE_ID  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND CENTER_ID  = #{centerId}
+            </if>
+            <if test="dateDt != null and dateDt != ''">
+                AND DATE_DT = #{dateDt}
+            </if>
+        </where>
+        group by index_id
+    </select>
+
+    <select id="findRateTrendList" resultType="IndexOrder">
+        SELECT
+        sum(index_value) as indexValue,
+        sum(index_all) as indexAll,
+        date_dt as dateDt,
+        index_id as indexId
+        FROM
+        rrs_index_order
+        <where>
+            1 = 1
+            <if test="indexId != null and indexId != ''">
+                AND index_id  = #{indexId}
+            </if>
+            <if test="regionId != null and regionId != ''">
+                AND region_id  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND trade_id  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND center_id  = #{centerId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &gt; = to_date(#{startDate},'yyyymmdd')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &lt; = to_date(#{endDate},'yyyymmdd')
+            </if>
+        </where>
+        group by date_dt,index_id order by date_dt
+    </select>
+
+    <select id="getIndexOrders" resultType="String">
+        SELECT SUM(INDEX_VALUE) AS indexOrders
+        FROM
+        RRS_INDEX_ORDER
+        <where>
+            <if test="regionId != null and regionId != ''">
+                AND "REGION_ID"  = #{regionId}
+            </if>
+            <if test="tradeId != null and tradeId != ''">
+                AND "TRADE_ID"  = #{tradeId}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                AND "CENTER_ID"  = #{centerId}
+            </if>
+            <if test="indexId != null and indexId != ''">
+                AND "INDEX_ID"  = #{indexId}
+            </if>
+            <if test="regionName != null and regionName != ''">
+                AND "REGION_NAME"  = #{regionName}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &gt; = to_date(#{startDate},'yyyymmdd')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND to_date(substr(date_dt,0,8),'yyyymmdd') &lt; = to_date(#{endDate},'yyyymmdd')
+            </if>
+        </where>
+    </select>
+
+</mapper>
